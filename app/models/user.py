@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Enum
+from sqlalchemy.orm import relationship
 from app.db.base import Base
 import enum
 
@@ -16,3 +17,7 @@ class User(Base):
     phone = Column(String)
     address = Column(String)
     user_type = Column(Enum(UserType))
+
+    # Relationships
+    products = relationship("Product", back_populates="vendor")
+    orders = relationship("Order", back_populates="customer")

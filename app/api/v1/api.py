@@ -1,5 +1,8 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import auth, farmers, vendors, products, reviews, orders, repeat_orders, cart, websocket
+from app.api.v1.endpoints import (
+    auth, farmers, vendors, products, reviews, orders, 
+    repeat_orders, cart, websocket, vendor_dashboard
+)
 
 api_router = APIRouter()
 
@@ -12,3 +15,4 @@ api_router.include_router(orders.router, prefix="/orders", tags=["orders"])
 api_router.include_router(repeat_orders.router, prefix="/repeat-orders", tags=["repeat-orders"])
 api_router.include_router(cart.router, prefix="/cart", tags=["cart"])
 api_router.include_router(websocket.router, tags=["websocket"])
+api_router.include_router(vendor_dashboard.router, prefix="/vendor-dashboard", tags=["vendor-dashboard"])
