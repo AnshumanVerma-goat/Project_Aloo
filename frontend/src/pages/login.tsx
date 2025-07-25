@@ -49,19 +49,17 @@ const Login: React.FC = () => {
       return;
     }
 
-    try {
-      const response = await axios.post('http://localhost:8000/auth/login', {
-        username: email,
-        password,
-      });
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, {
+          username: email,
+          password,
+        });
 
-      if (rememberMe) {
-        localStorage.setItem('token', response.data.access_token);
-      } else {
-        sessionStorage.setItem('token', response.data.access_token);
-      }
-      
-      if (response.data.user_type === 'vendor') {
+        if (rememberMe) {
+          localStorage.setItem('token', response.data.access_token);
+        } else {
+          sessionStorage.setItem('token', response.data.access_token);
+        }      if (response.data.user_type === 'vendor') {
         navigate('/seller-dashboard');
       } else {
         setError('Only vendors can access the seller dashboard');
