@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Dashboard - Street Food Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#4F46E5',
+            secondary: '#10B981',
+            dark: '#1F2937',
+            light: '#F9FAFB',
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Include the language toggle styles from t.html */
+    .language-toggle input[type="checkbox"] {
+      height: 0;
+      width: 0;
+      visibility: hidden;
+    }
+    .language-toggle label {
+      cursor: pointer;
+      text-indent: -9999px;
+      width: 80px;
+      height: 40px;
+      background: #4F46E5;
+      display: block;
+      border-radius: 20px;
+      position: relative;
+    }
+    .language-toggle label:after {
+      content: 'EN HI';
+      display: block;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 30px;
+      height: 30px;
+      background: #fff;
+      border-radius: 15px;
+      transition: 0.3s;
+      text-indent: 0;
+      color: #4F46E5;
+      font-weight: bold;
+      font-size: 12px;
+      line-height: 30px;
+      text-align: center;
+    }
+    .language-toggle input:checked + label {
+      background: #10B981;
+    }
+    .language-toggle input:checked + label:after {
+      left: calc(100% - 5px);
+      transform: translateX(-100%);
+      content: 'HI EN';
+    }
+
+    /* Additional dashboard styles */
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: #EF4444;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body class="font-sans bg-gray-50">
+  <!-- Top Navigation -->
+  <header class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-gray-900 lang-en">Vendor Dashboard</h1>
+      <h1 class="text-xl font-bold text-gray-900 lang-hi hidden">विक्रेता डैशबोर्ड</h1>
+      
+      <div class="flex items-center space-x-6">
+        <div class="language-toggle">
+          <input type="checkbox" id="language-switch" onchange="toggleLanguage()" />
+          <label for="language-switch">Toggle</label>
+        </div>
+        
+        <!-- Cart Icon -->
+        <button id="cart-button" class="relative p-2">
+          <i class="fas fa-shopping-cart text-xl text-gray-600"></i>
+          <span id="cart-count" class="cart-badge">0</span>
+        </button>
+        
+        <!-- User Menu -->
+        <div class="relative" id="user-menu">
+          <button class="flex items-center space-x-2">
+            <img src="/images/avatar.png" alt="User Avatar" class="w-8 h-8 rounded-full">
+            <span class="text-sm font-medium text-gray-700" id="user-name">Loading...</span>
+          </button>
+        </div>
+        
+        <button onclick="logout()" class="text-sm font-medium text-primary hover:text-indigo-700 lang-en">Logout</button>
+        <button onclick="logout()" class="text-sm font-medium text-primary hover:text-indigo-700 lang-hi hidden">लॉग आउट</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row gap-6">
+      <!-- Sidebar -->
+      <aside class="w-full md:w-64 bg-white p-4 rounded-lg shadow-sm">
+        <nav>
+          <ul class="space-y-2">
+            <li>
+              <button onclick="showTab('suppliers')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition-colors lang-en">
+                Verified Suppliers
+              </button>
+              <button onclick="showTab('suppliers')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition-colors lang-hi hidden">
+                सत्यापित आपूर्तिकर्ता
+              </button>
+            </li>
+            <li>
+              <button onclick="showTab('orders')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition-colors lang-en">
+                My Orders
+              </button>
+              <button onclick="showTab('orders')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition-colors lang-hi hidden">
+                मेरे ऑर्डर
+              </button>
+            </li>
+            <li>
+              <button onclick="showTab('reorder')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition-colors lang-en">
+                Reorder Items
+              </button>
+              <button onclick="showTab('reorder')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition-colors lang-hi hidden">
+                पुनः ऑर्डर करें
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main Content Area -->
+      <div class="flex-1">
+        <!-- Suppliers Tab -->
+        <div id="suppliers-tab" class="bg-white rounded-lg shadow-sm p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-semibold text-gray-800 lang-en">Browse Products</h2>
+            <h2 class="text-lg font-semibold text-gray-800 lang-hi hidden">उत्पाद ब्राउज़ करें</h2>
+            
+            <div class="flex space-x-4">
+              <input type="text" id="search-products" placeholder="Search products..." class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+              <select id="category-filter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                <option value="">All Categories</option>
+                <option value="vegetables">Vegetables</option>
+                <option value="fruits">Fruits</option>
+                <option value="grains">Grains</option>
+              </select>
+            </div>
+          </div>
+          
+          <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Products will be inserted here -->
+          </div>
+        </div>
+
+        <!-- Orders Tab -->
+        <div id="orders-tab" class="hidden bg-white rounded-lg shadow-sm p-6">
+          <h2 class="text-lg font-semibold text-gray-800 mb-6 lang-en">My Orders</h2>
+          <h2 class="text-lg font-semibold text-gray-800 mb-6 lang-hi hidden">मेरे ऑर्डर</h2>
+          
+          <div class="overflow-x-auto">
+            <table class="min-w-full">
+              <thead>
+                <tr>
+                  <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                  <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                  <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                  <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+                </tr>
+              </thead>
+              <tbody id="orders-table-body">
+                <!-- Orders will be inserted here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Reorder Tab -->
+        <div id="reorder-tab" class="hidden bg-white rounded-lg shadow-sm p-6">
+          <h2 class="text-lg font-semibold text-gray-800 mb-6 lang-en">Quick Reorder</h2>
+          <h2 class="text-lg font-semibold text-gray-800 mb-6 lang-hi hidden">त्वरित पुनः ऑर्डर</h2>
+          
+          <div id="reorder-items-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Reorder items will be inserted here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Cart Modal -->
+  <div id="cart-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+      <div class="flex justify-between items-center pb-3">
+        <h3 class="text-xl font-semibold text-gray-900 lang-en">Shopping Cart</h3>
+        <h3 class="text-xl font-semibold text-gray-900 lang-hi hidden">शॉपिंग कार्ट</h3>
+        <button onclick="toggleCart()" class="text-gray-400 hover:text-gray-500">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div id="cart-items" class="space-y-4 max-h-96 overflow-y-auto">
+        <!-- Cart items will be inserted here -->
+      </div>
+      
+      <div class="mt-4 pt-4 border-t">
+        <div class="flex justify-between mb-4">
+          <span class="font-semibold lang-en">Total:</span>
+          <span class="font-semibold lang-hi hidden">कुल:</span>
+          <span id="cart-total" class="font-semibold">₹0.00</span>
+        </div>
+        
+        <button onclick="checkout()" class="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors lang-en">
+          Proceed to Checkout
+        </button>
+        <button onclick="checkout()" class="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors lang-hi hidden">
+          चेकआउट करें
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script src="js/vendor-dashboard.js"></script>
+</body>
+</html>

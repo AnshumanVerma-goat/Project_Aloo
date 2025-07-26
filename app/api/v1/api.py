@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import (
+from api.v1.endpoints import (
     auth, farmers, vendors, products, reviews, orders, 
     repeat_orders, cart, websocket, vendor_dashboard
 )

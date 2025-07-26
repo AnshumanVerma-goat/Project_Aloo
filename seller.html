@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar {
+            transition: all 0.3s;
+        }
+        .dashboard-card {
+            transition: transform 0.3s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-card {
+            transition: all 0.3s;
+        }
+        .product-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .order-item:hover {
+            background-color: #f8fafc;
+        }
+        #menu-toggle:checked ~ .sidebar {
+            left: 0;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -300px;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Mobile menu button -->
+        <input type="checkbox" id="menu-toggle" class="hidden">
+        <label for="menu-toggle" class="mobile-menu-btn fixed top-4 left-4 z-50 bg-white p-2 rounded-md shadow-md md:hidden">
+            <i class="fas fa-bars text-gray-700 text-xl"></i>
+        </label>
+
+        <!-- Sidebar -->
+        <div class="sidebar fixed md:relative w-64 bg-indigo-700 text-white h-full overflow-y-auto z-40">
+            <div class="p-4 border-b border-indigo-600">
+                <h2 class="text-xl font-bold flex items-center">
+                    <i class="fas fa-store mr-2"></i>
+                    Seller Hub
+                </h2>
+            </div>
+            <div class="p-4">
+                <div class="flex items-center mb-6">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5b189cc1-7aec-413e-ad79-3a171ca8bdbb.png" alt="Seller profile photo showing a professional business person smiling" class="rounded-full w-12 h-12 mr-3 border-2 border-white">
+                    <div>
+                        <h3 class="font-semibold">Seller Name</h3>
+                        <p class="text-indigo-200 text-sm">Premium Seller</p>
+                    </div>
+                </div>
+
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="flex items-center p-2 rounded-md bg-indigo-800">
+                            <i class="fas fa-chart-line mr-3"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#products" class="flex items-center p-2 rounded-md hover:bg-indigo-600">
+                            <i class="fas fa-boxes mr-3"></i>
+                            Products
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#orders" class="flex items-center p-2 rounded-md hover:bg-indigo-600">
+                            <i class="fas fa-truck mr-3"></i>
+                            Orders
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#vendors" class="flex items-center p-2 rounded-md hover:bg-indigo-600">
+                            <i class="fas fa-users mr-3"></i>
+                            Vendors
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#history" class="flex items-center p-2 rounded-md hover:bg-indigo-600">
+                            <i class="fas fa-history mr-3"></i>
+                            Sales History
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#settings" class="flex items-center p-2 rounded-md hover:bg-indigo-600">
+                            <i class="fas fa-cog mr-3"></i>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-y-auto">
+            <!-- Header -->
+            <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 rounded-full bg-gray-100 text-gray-600">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                        <i class="fas fa-plus mr-2"></i> New Product
+                    </button>
+                </div>
+            </header>
+
+            <main class="p-6">
+                <!-- Welcome & Stats -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800">Welcome back, <span class="text-indigo-600">Seller Name</span></h2>
+                        <div class="text-sm text-gray-500">
+                            <i class="fas fa-calendar-alt mr-1"></i>
+                            <span id="today-date"></span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="dashboard-card bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="text-gray-500">Total Orders Today</p>
+                                    <h3 class="text-3xl font-bold text-gray-800">24</h3>
+                                    <p class="text-green-500 text-sm mt-2">
+                                        <i class="fas fa-arrow-up"></i> 5% from yesterday
+                                    </p>
+                                </div>
+                                <div class="text-blue-500 bg-blue-100 p-3 rounded-full">
+                                    <i class="fas fa-shopping-bag text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="text-gray-500">Total Earnings (Week)</p>
+                                    <h3 class="text-3xl font-bold text-gray-800">$2,840</h3>
+                                    <p class="text-green-500 text-sm mt-2">
+                                        <i class="fas fa-arrow-up"></i> 12% from last week
+                                    </p>
+                                </div>
+                                <div class="text-green-500 bg-green-100 p-3 rounded-full">
+                                    <i class="fas fa-dollar-sign text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card bg-white p-6 rounded-lg shadow-sm border-l-4 border-purple-500">
+                            <div class="flex justify-between">
+                                <div>
+                                    <p class="text-gray-500">Active Products</p>
+                                    <h3 class="text-3xl font-bold text-gray-800">42</h3>
+                                    <p class="text-red-500 text-sm mt-2">
+                                        <i class="fas fa-arrow-down"></i> 2 low stock
+                                    </p>
+                                </div>
+                                <div class="text-purple-500 bg-purple-100 p-3 rounded-full">
+                                    <i class="fas fa-box-open text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Listings (Using Cards) -->
+                <section id="products" class="mb-12">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-800">Product Listings</h2>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                                <i class="fas fa-filter mr-1"></i> Filter
+                            </button>
+                            <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">
+                                <i class="fas fa-sort mr-1"></i> Sort
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+                        <!-- Product Card 1 -->
+                        <div class="product-card bg-white rounded-lg shadow-sm overflow-hidden">
+                            <div class="relative">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8a5f531b-0c77-41a0-8839-5c61b36515a0.png" alt="Brand new wireless headphones with premium sound quality and noise cancellation" class="w-full h-48 object-cover">
+                                <span class="absolute top-2 right-2 bg-yellow-400 text-xs px-2 py-1 rounded-full">Best Seller</span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-800 mb-1">Premium Wireless Headphones</h3>
+                                <p class="text-gray-500 text-sm mb-2">Electronics</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-gray-900">$129.99</span>
+                                    <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">In Stock</span>
+                                </div>
+                            </div>
+                            <div class="px-4 py-2 bg-gray-50 flex justify-between border-t">
+                                <button class="text-blue-500 hover:text-blue-700">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Card 2 -->
+                        <div class="product-card bg-white rounded-lg shadow-sm overflow-hidden">
+                            <div class="relative">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/726ededc-6a09-4f61-b57c-c10f45a8d278.png" alt="Organic cotton t-shirt with minimalist design in multiple color options" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-800 mb-1">Organic Cotton T-Shirt</h3>
+                                <p class="text-gray-500 text-sm mb-2">Fashion</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-gray-900">$24.99</span>
+                                    <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Low Stock</span>
+                                </div>
+                            </div>
+                            <div class="px-4 py-2 bg-gray-50 flex justify-between border-t">
+                                <button class="text-blue-500 hover:text-blue-700">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Card 3 -->
+                        <div class="product-card bg-white rounded-lg shadow-sm overflow-hidden">
+                            <div class="relative">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d72637d5-3be4-4ed2-ac95-1895695d6587.png" alt="Stainless steel water bottle with double wall insulation and leak-proof lid" class="w-full h-48 object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-800 mb-1">Stainless Steel Water Bottle</h3>
+                                <p class="text-gray-500 text-sm mb-2">Home & Kitchen</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-gray-900">$19.99</span>
+                                    <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">In Stock</span>
+                                </div>
+                            </div>
+                            <div class="px-4 py-2 bg-gray-50 flex justify-between border-t">
+                                <button class="text-blue-500 hover:text-blue-700">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Card 4 -->
+                        <div class="product-card bg-white rounded-lg shadow-sm overflow-hidden">
+                            <div class="relative">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/68d4fca5-3130-4ef3-bc56-6e9811b90e07.png" alt="Smartwatch with fitness tracking and notification features in sleek black design" class="w-full h-48 object-cover">
+                                <span class="absolute top-2 right-2 bg-blue-400 text-white text-xs px-2 py-1 rounded-full">New</span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-800 mb-1">Smart Watch Pro</h3>
+                                <p class="text-gray-500 text-sm mb-2">Electronics</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-gray-900">$189.99</span>
+                                    <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">In Stock</span>
+                                </div>
+                            </div>
+                            <div class="px-4 py-2 bg-gray-50 flex justify-between border-t">
+                                <button class="text-blue-500 hover:text-blue-700">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
+                            <i class="fas fa-plus mr-2"></i> Add New Product
+                        </button>
+                    </div>
+                </section>
+
+                <!-- New Orders -->
+                <section id="orders" class="mb-12">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">New Orders</h2>
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                        <div class="grid grid-cols-12 bg-gray-50 p-3 border-b">
+                            <div class="col-span-3 font-medium text-sm text-gray-500">Order ID</div>
+                            <div class="col-span-3 font-medium text-sm text-gray-500">Customer</div>
+                            <div class="col-span-2 font-medium text-sm text-gray-500">Items</div>
+                            <div class="col-span-2 font-medium text-sm text-gray-500">Total</div>
+                            <div class="col-span-2 font-medium text-sm text-gray-500">Action</div>
+                        </div>
+
+                        <!-- Order Item 1 -->
+                        <div class="order-item grid grid-cols-12 p-3 border-b hover:bg-blue-50">
+                            <div class="col-span-3 flex items-center text-sm font-medium text-blue-600">#ORD-12456</div>
+                            <div class="col-span-3 flex items-center">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/598df0bf-a1d0-40ec-93f2-8c0345882009.png" alt="Profile photo of customer John Smith" class="w-8 h-8 rounded-full mr-2">
+                                <span>John Smith</span>
+                            </div>
+                            <div class="col-span-2 flex items-center text-sm">3 items</div>
+                            <div class="col-span-2 flex items-center font-medium">$149.97</div>
+                            <div class="col-span-2 flex items-center space-x-2">
+                                <button class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded hover:bg-green-200">
+                                    Accept
+                                </button>
+                                <button class="px-3 py-1 bg-red-100 text-red-800 text-sm rounded hover:bg-red-200">
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Order Item 2 -->
+                        <div class="order-item grid grid-cols-12 p-3 border-b hover:bg-blue-50">
+                            <div class="col-span-3 flex items-center text-sm font-medium text-blue-600">#ORD-12455</div>
+                            <div class="col-span-3 flex items-center">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8e90d831-fa98-4c52-bb78-daf78bd04f6c.png" alt="Profile photo of customer Sarah Johnson" class="w-8 h-8 rounded-full mr-2">
+                                <span>Sarah Johnson</span>
+                            </div>
+                            <div class="col-span-2 flex items-center text-sm">1 item</div>
+                            <div class="col-span-2 flex items-center font-medium">$24.99</div>
+                            <div class="col-span-2 flex items-center space-x-2">
+                                <button class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded hover:bg-green-200">
+                                    Accept
+                                </button>
+                                <button class="px-3 py-1 bg-red-100 text-red-800 text-sm rounded hover:bg-red-200">
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Order Item 3 -->
+                        <div class="order-item grid grid-cols-12 p-3 border-b hover:bg-blue-50">
+                            <div class="col-span-3 flex items-center text-sm font-medium text-blue-600">#ORD-12454</div>
+                            <div class="col-span-3 flex items-center">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1e3e87c9-04bd-476b-b6f2-88b77cd4f4ba.png" alt="Profile photo of customer Michael Brown" class="w-8 h-8 rounded-full mr-2">
+                                <span>Michael Brown</span>
+                            </div>
+                            <div class="col-span-2 flex items-center text-sm">5 items</div>
+                            <div class="col-span-2 flex items-center font-medium">$289.95</div>
+                            <div class="col-span-2 flex items-center space-x-2">
+                                <button class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded hover:bg-green-200">
+                                    Accept
+                                </button>
+                                <button class="px-3 py-1 bg-red-100 text-red-800 text-sm rounded hover:bg-red-200">
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Vendor List -->
+                <section id="vendors" class="mb-12">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Recent Vendors</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Vendor Card 1 -->
+                        <div class="vendor-card bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                            <div class="flex items-center mb-3">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/02f9a732-1aa2-4c57-b3f5-676904c11506.png" alt="Profile photo of Business A representative" class="w-12 h-12 rounded-full border-2 border-indigo-200 mr-3">
+                                <div>
+                                    <h3 class="font-medium text-gray-800">Business A</h3>
+                                    <p class="text-xs text-gray-500">Just ordered: 3 items</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <button class="px-2 py-1 bg-blue-100 text-blue-800 rounded hover:bg-blue-200">
+                                    <i class="fas fa-phone mr-1"></i> Call
+                                </button>
+                                <button class="px-2 py-1 bg-green-100 text-green-800 rounded hover:bg-green-200">
+                                    <i class="fas fa-envelope mr-1"></i> Message
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Vendor Card 2 -->
+                        <div class="vendor-card bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                            <div class="flex items-center mb-3">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2870e17f-bd5a-49c6-9635-88e6f2c1c3a3.png" alt="Profile photo of Company B representative" class="w-12 h-12 rounded-full border-2 border-indigo-200 mr-3">
+                                <div>
+                                    <h3 class="font-medium text-gray-800">Company B</h3>
+                                    <p class="text-xs text-gray-500">Just ordered: 1 item</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <button class="px-2 py-1 bg-blue-100 text-blue-800 rounded hover:bg-blue-200">
+                                    <i class="fas fa-phone mr-1"></i> Call
+                                </button>
+                                <button class="px-2 py-1 bg-green-100 text-green-800 rounded hover:bg-green-200">
+                                    <i class="fas fa-envelope mr-1"></i> Message
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Vendor Card 3 -->
+                        <div class="vendor-card bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                            <div class="flex items-center mb-3">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/81c60d12-d24a-4119-91db-2ee5953fa644.png" alt="Profile photo of Enterprise C representative" class="w-12 h-12 rounded-full border-2 border-indigo-200 mr-3">
+                                <div>
+                                    <h3 class="font-medium text-gray-800">Enterprise C</h3>
+                                    <p class="text-xs text-gray-500">Ordered yesterday</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <button class="px-2 py-1 bg-blue-100 text-blue-800 rounded hover:bg-blue-200">
+                                    <i class="fas fa-phone mr-1"></i> Call
+                                </button>
+                                <button class="px-2 py-1 bg-green-100 text-green-800 rounded hover:bg-green-200">
+                                    <i class="fas fa-envelope mr-1"></i> Message
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Vendor Card 4 -->
+                        <div class="vendor-card bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                            <div class="flex items-center mb-3">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/17aae2ea-16e6-49ea-b9ce-a9ce6e157a81.png" alt="Profile photo of Organization D representative" class="w-12 h-12 rounded-full border-2 border-indigo-200 mr-3">
+                                <div>
+                                    <h3 class="font-medium text-gray-800">Organization D</h3>
+                                    <p class="text-xs text-gray-500">Ordered 2 days ago</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <button class="px-2 py-1 bg-blue-100 text-blue-800 rounded hover:bg-blue-200">
+                                    <i class="fas fa-phone mr-1"></i> Call
+                                </button>
+                                <button class="px-2 py-1 bg-green-100 text-green-800 rounded hover:bg-green-200">
+                                    <i class="fas fa-envelope mr-1"></i> Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sales History -->
+                <section id="history" class="mb-12">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-800">Sales History</h2>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                                <i class="fas fa-file-pdf mr-1"></i> Export PDF
+                            </button>
+                            <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                                <i class="fas fa-file-csv mr-1"></i> Export CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                        <div class="p-4 border-b">
+                            <div class="grid grid-cols-12">
+                                <div class="col-span-2 font-medium text-sm text-gray-500">Date</div>
+                                <div class="col-span-3 font-medium text-sm text-gray-500">Vendor</div>
+                                <div class="col-span-4 font-medium text-sm text-gray-500">Items</div>
+                                <div class="col-span-2 font-medium text-sm text-gray-500">Status</div>
+                                <div class="col-span-1 font-medium text-sm text-gray-500">Amount</div>
+                            </div>
+                        
