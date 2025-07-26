@@ -1,6 +1,12 @@
-DROP DATABASE IF EXISTS aloo;
-CREATE DATABASE aloo;
-\connect aloo
+-- Drop existing tables in correct order
+DROP TABLE IF EXISTS subscription_items CASCADE;
+DROP TABLE IF EXISTS subscriptions CASCADE;
+DROP TABLE IF EXISTS order_items CASCADE;
+DROP TABLE IF EXISTS orders CASCADE;
+DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
+-- Create fresh tables
 
 -- Create users table
 CREATE TABLE users (
