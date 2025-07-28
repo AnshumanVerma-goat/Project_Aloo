@@ -5,9 +5,9 @@ from typing import Protocol
 
 class TypingOnlyProtocol(Protocol):
     pass
-from app.crud.user import authenticate_user
-from app.core.security import create_access_token
-from app.db.session import get_db
+from ....crud.user import authenticate_user
+from ....core.security import create_access_token
+from ....db.session import get_db
 
 router = APIRouter()
 

@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from core.config import settings
-from api.v1.api import api_router
-from db.session import engine
-from db.init_db import init_db
+from .core.config import settings
+from .api.v1.api import api_router
+from .db.session import engine
+from .db.init_db import init_db
 
 # Create FastAPI app
 app = FastAPI(

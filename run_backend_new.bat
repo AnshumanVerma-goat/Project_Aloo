@@ -4,6 +4,9 @@ setlocal enabledelayedexpansion
 REM --- SETUP AND RUN THE ALOO BACKEND ---
 echo Checking prerequisites...
 
+REM Set the PYTHONPATH to the root directory
+set "PYTHONPATH=%CD%"
+
 REM 1. Check Python and PostgreSQL
 python --version > nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
